@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, ForeignKey, Date
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, ForeignKey, Date, func
 from config import Config
 
 # Create engine and metadata
@@ -14,7 +14,7 @@ transactions = Table(
     Column('amount', Float, nullable=False),
     Column('category', String, nullable=False),
     Column('description', String),
-    Column('date', Date)
+    Column('date', Date, server_default=func.current_date())
 )
 
 # Create transactions table
