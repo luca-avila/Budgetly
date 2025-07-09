@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, ForeignKey, Date, func
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, Date, func
 from config import Config
 
 # Create engine and metadata
