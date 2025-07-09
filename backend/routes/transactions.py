@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from backend.models import transactions, engine
 from datetime import date
+from sqlalchemy import desc
 
 transactions_bp = Blueprint('transactions', __name__)
 
@@ -38,3 +39,26 @@ def add_transaction():
 
     # Return success message
     return jsonify({'message': 'Transaction added successfully'}), 201
+
+@transactions_bp.route('/transactions', methods=['GET'])
+def get_transactions():
+    # Get all transactions
+    with engine.begin() as conn:
+        stmt = transactions.select().order_by(desc(transactions.c.date))  # ordena por fecha descendente
+        result = conn.execute(stmt).fetchall()
+    
+    # Add every transaction in dict format
+    transaction_list = [
+            {
+                'id': t['id'],
+                'type': t['type'],
+                'amount': t['amount'],
+                'category': t['category'],
+                'description': t['description'],
+                'date': t['date'].isoformat() if t['date'] else None
+            }
+            for t in result
+        ]
+
+    # Return transactions in json format
+    return jsonify(transaction_list), 200
