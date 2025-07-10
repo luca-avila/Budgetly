@@ -6,8 +6,6 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    CORS(app)
-    
     app.register_blueprint(transactions_bp)
 
     return app
