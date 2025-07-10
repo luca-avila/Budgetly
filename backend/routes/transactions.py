@@ -5,6 +5,18 @@ from backend.models import transactions, engine
 
 transactions_bp = Blueprint('transactions', __name__)
 
+# Helper function to build the transaction dictionary
+def build_transaction_response(transaction):
+    return {
+        'id': transaction['id'],
+        'type': transaction['type'],
+        'amount': transaction['amount'],
+        'category': transaction['category'],
+        'description': transaction['description'],
+        'date': transaction['date'].isoformat() if transaction['date'] else None
+    }
+
+
 @transactions_bp.route('/transactions', methods=['POST'])
 def add_transaction():
     # Get json
@@ -21,6 +33,9 @@ def add_transaction():
         r_amount = float(data['amount'])
     except (ValueError, TypeError):
         return jsonify({'error': 'Amount must be a number'}), 400
+    # Return error if amount is negative
+    if r_amount < 0:
+        return jsonify({'error': 'Amount must be a positive number'}), 400
 
     # Return error if wrong transaction type is sended
     if data['type'] not in ['Buy', 'Income']:
@@ -42,46 +57,42 @@ def add_transaction():
 
 @transactions_bp.route('/transactions', methods=['GET'])
 def get_transactions():
-    # Get all transactions
-    with engine.begin() as conn:
-        stmt = transactions.select().order_by(desc(transactions.c.date))  # ordena por fecha descendente
-        result = conn.execute(stmt).fetchall()
+    try:
+        # Get all transactions
+        with engine.begin() as conn:
+            stmt = transactions.select().order_by(desc(transactions.c.date))  # ordena por fecha descendente
+            result = conn.execute(stmt).fetchall()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
+    # If no transactions found, return empty list
+    if not result:
+        return jsonify([]), 200
+
     # Add every transaction in dict format
-    transaction_list = [
-            {
-                'id': t['id'],
-                'type': t['type'],
-                'amount': t['amount'],
-                'category': t['category'],
-                'description': t['description'],
-                'date': t['date'].isoformat() if t['date'] else None
-            }
-            for t in result
-        ]
+    transaction_list = [build_transaction_response(transaction) for transaction in result]
+
     # Return transactions in json format
     return jsonify(transaction_list), 200
 
 @transactions_bp.route('/transactions/<int:id>', methods=['GET'])
 def get_transaction(id):
-    # Get transaction by id
-    with engine.begin() as conn:
-        stmt = transactions.select().where(transactions.c.id == id)
-        result = conn.execute(stmt).fetchone()
-
+    try:
+        # Get transaction by id
+        with engine.begin() as conn:
+            stmt = transactions.select().where(transactions.c.id == id)
+            result = conn.execute(stmt).fetchone()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
     # If transaction not found, return error
     if result is None:
         return jsonify({'error': 'Transaction not found'}), 404
 
     # Return transaction in json format
-    transaction = {
-        'id': result['id'],
-        'type': result['type'],
-        'amount': result['amount'],
-        'category': result['category'],
-        'description': result['description'],
-        'date': result['date'].isoformat() if result['date'] else None
-    }
+    transaction = build_transaction_response(result)
+
+    # Return transaction
     return jsonify(transaction), 200
 
 
@@ -91,10 +102,31 @@ def modify_transaction(id):
     data = request.json
     to_update = {}
 
+    try:
+        # Check if the transaction exists
+        with engine.begin() as conn:
+            stmt = transactions.select().where(transactions.c.id == id)
+            result = conn.execute(stmt).fetchone()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    # If transaction not found, return error
+    if result is None:
+        return jsonify({'error': 'Transaction not found'}), 404
+
     # Check what fields should be updated and save in to_update
     if 'amount' in data:
         to_update['amount'] = data['amount']
-    
+    # Check if amount is a number
+        try:
+            r_amount = float(data['amount'])
+        except (ValueError, TypeError):
+            return jsonify({'error': 'Amount must be a number'}), 400
+    # Check if amount is negative
+        if r_amount < 0:
+            return jsonify({'error': 'Amount must be a positive number'}), 400
+        to_update['amount'] = r_amount
+
     if 'category' in data:
         to_update['category'] = data['category']
 
@@ -110,11 +142,14 @@ def modify_transaction(id):
     if not to_update:
         return jsonify({'error': 'No fields to update'}), 400
     
-    # Update the transaction in the database
-    with engine.begin() as conn:
-        update_statement = transactions.update().where(transactions.c.id == id).values(**to_update)
-        result = conn.execute(update_statement)
-
+    try:
+        # Update the transaction in the database
+        with engine.begin() as conn:
+            update_statement = transactions.update().where(transactions.c.id == id).values(**to_update)
+            result = conn.execute(update_statement)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
     # If no rows were updated, return error
     if result.rowcount == 0:
         return jsonify({'error': 'Transaction not found'}), 404
@@ -124,11 +159,14 @@ def modify_transaction(id):
 
 @transactions_bp.route('/transactions/<int:id>', methods=['DELETE'])
 def delete_transaction(id):
-    # Delete the transaction from the database
-    with engine.begin() as conn:
-        delete_statement = transactions.delete().where(transactions.c.id == id)
-        result = conn.execute(delete_statement)
-
+    try:
+        # Delete the transaction from the database
+        with engine.begin() as conn:
+            delete_statement = transactions.delete().where(transactions.c.id == id)
+            result = conn.execute(delete_statement)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
     # If no rows were deleted, return error
     if result.rowcount == 0:
         return jsonify({'error': 'Transaction not found'}), 404
