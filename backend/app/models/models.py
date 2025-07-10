@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, Date, func
-from backend.config import Config
+from backend.app.config import Config
 
 # Create engine and metadata
 engine = create_engine(Config.DATABASE_URL, echo=True)

@@ -1,7 +1,7 @@
 from datetime import date
 from sqlalchemy import desc
 from flask import Blueprint, request, jsonify
-from backend.models import transactions, engine
+from backend.app.models.models import transactions, engine
 
 transactions_bp = Blueprint('transactions', __name__)
 

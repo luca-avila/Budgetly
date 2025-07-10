@@ -31,21 +31,19 @@
 ```
 budgetly/
 ├── backend/
-│   ├── app.py              # Main Flask app
-│   ├── models.py           # SQLAlchemy table definitions
-│   ├── config.py           # Config settings
-│   ├── database.db         # SQLite database
-│   ├── requirements.txt    # Python dependencies
-│   ├── routes/
-│   │   └── transactions.py # Blueprint or route handlers
-│   ├── templates/
-│   │   └── index.html      # Main HTML template
-│   └── static/
-│       ├── style.css
-│       ├── main.js
-│       ├── charts.js
-│       └── filters.js
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── routes/
+│   │   │   └── transactions.py
+│   │   ├── models/
+│   │   │   └── models.py
+│   │   └── config.py
+│   │ 
+├── frontend/ (HTML/JS/CSS)
+├── run.py
 ├── README.md
+└── requirements.txt
+
 ```
 
 ---
