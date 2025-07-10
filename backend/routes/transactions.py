@@ -1,7 +1,7 @@
-from flask import Blueprint, request, jsonify
-from backend.models import transactions, engine
 from datetime import date
 from sqlalchemy import desc
+from flask import Blueprint, request, jsonify
+from backend.models import transactions, engine
 
 transactions_bp = Blueprint('transactions', __name__)
 
@@ -62,6 +62,29 @@ def get_transactions():
     # Return transactions in json format
     return jsonify(transaction_list), 200
 
+@transactions_bp.route('/transactions/<int:id>', methods=['GET'])
+def get_transaction(id):
+    # Get transaction by id
+    with engine.begin() as conn:
+        stmt = transactions.select().where(transactions.c.id == id)
+        result = conn.execute(stmt).fetchone()
+
+    # If transaction not found, return error
+    if result is None:
+        return jsonify({'error': 'Transaction not found'}), 404
+
+    # Return transaction in json format
+    transaction = {
+        'id': result['id'],
+        'type': result['type'],
+        'amount': result['amount'],
+        'category': result['category'],
+        'description': result['description'],
+        'date': result['date'].isoformat() if result['date'] else None
+    }
+    return jsonify(transaction), 200
+
+
 @transactions_bp.route('/transactions/<int:id>', methods=['PATCH'])
 def modify_transaction(id):
     # Get json
@@ -98,3 +121,17 @@ def modify_transaction(id):
     
     # Return success message
     return jsonify({'message': 'Transaction updated successfully'}), 200
+
+@transactions_bp.route('/transactions/<int:id>', methods=['DELETE'])
+def delete_transaction(id):
+    # Delete the transaction from the database
+    with engine.begin() as conn:
+        delete_statement = transactions.delete().where(transactions.c.id == id)
+        result = conn.execute(delete_statement)
+
+    # If no rows were deleted, return error
+    if result.rowcount == 0:
+        return jsonify({'error': 'Transaction not found'}), 404
+    
+    # Return success message
+    return jsonify({'message': 'Transaction deleted successfully'}), 200
