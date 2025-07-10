@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgetly</title>
+</head>
+    <body>
+        <h1>Budgetly</h1>
+        <!-- Form to add a new transaction -->
+        <form id="transaction-form">
+            <input type="text" id="description" placeholder="Description" required>
+            <input type="text" id="category" placeholder="Category" required>
+            <input type="number" id="amount" placeholder="Amount" required>
+            <select id="type">
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+            <button type="submit">Add Transaction</button>
+        </form>
+
+        <!-- Summary -->
+        <h2>Summary</h2>
+        <div id="summary">
+            <p>Total Income: $<span id="income-total">0</span></p>
+            <p>Total Expenses: $<span id="expense-total">0</span></p>
+            <p>Balance: $<span id="balance">0</span></p>
+        </div>
+
+        <!-- List of transactions -->
+        <h2>Transactions</h2>
+        <ul id="transaction-list">
+            <!-- Transactions will be dynamically added here -->
+        </ul>
+    </body>
+</html>

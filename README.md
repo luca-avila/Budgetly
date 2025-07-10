@@ -40,7 +40,9 @@ budgetly/
 │   │    └── config.py
 │   └── database.py
 │  
-├── frontend/ (HTML/JS/CSS)
+├── frontend/
+│   ├── static/
+│   └── index.html
 ├── run.py
 ├── README.md
 └── requirements.txt
