@@ -32,13 +32,14 @@
 budgetly/
 ├── backend/
 │   ├── app/
-│   │   ├── __init__.py
-│   │   ├── routes/
-│   │   │   └── transactions.py
-│   │   ├── models/
-│   │   │   └── models.py
-│   │   └── config.py
-│   │ 
+│   │    ├── __init__.py
+│   │    ├── routes/
+│   │    │   └── transactions.py
+│   │    ├── models/
+│   │    │   └── models.py
+│   │    └── config.py
+│   └── database.py
+│  
 ├── frontend/ (HTML/JS/CSS)
 ├── run.py
 ├── README.md
