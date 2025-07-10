@@ -59,6 +59,42 @@ def get_transactions():
             }
             for t in result
         ]
-
     # Return transactions in json format
     return jsonify(transaction_list), 200
+
+@transactions_bp.route('/transactions/<int:id>', methods=['PATCH'])
+def modify_transaction(id):
+    # Get json
+    data = request.json
+    to_update = {}
+
+    # Check what fields should be updated and save in to_update
+    if 'amount' in data:
+        to_update['amount'] = data['amount']
+    
+    if 'category' in data:
+        to_update['category'] = data['category']
+
+    if 'description' in data:
+        to_update['description'] = data['description']
+    
+    if 'type' in data:
+        if data['type'] not in ['Buy', 'Income']:
+            return jsonify({'error': 'Transaction type should be Buy or Income'}), 400
+        to_update['type'] = data['type']
+    
+    # If no fields to update, return error
+    if not to_update:
+        return jsonify({'error': 'No fields to update'}), 400
+    
+    # Update the transaction in the database
+    with engine.begin() as conn:
+        update_statement = transactions.update().where(transactions.c.id == id).values(**to_update)
+        result = conn.execute(update_statement)
+
+    # If no rows were updated, return error
+    if result.rowcount == 0:
+        return jsonify({'error': 'Transaction not found'}), 404
+    
+    # Return success message
+    return jsonify({'message': 'Transaction updated successfully'}), 200
