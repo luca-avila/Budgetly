@@ -42,6 +42,7 @@ budgetly/
 │  
 ├── frontend/
 │   ├── static/
+│   │   └── script.js
 │   └── index.html
 ├── run.py
 ├── README.md
