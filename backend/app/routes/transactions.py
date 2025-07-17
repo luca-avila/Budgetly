@@ -21,6 +21,10 @@ def build_transaction_response(transaction):
 def add_transaction():
     # Get json
     data = request.json
+    
+    # Return error if no JSON data received
+    if data is None:
+        return jsonify({'error': 'No JSON data received'}), 400
 
     # Return error if not all required fields are received
     required_fields = ['type', 'amount', 'category']
@@ -89,7 +93,7 @@ def get_transaction(id):
     if result is None:
         return jsonify({'error': 'Transaction not found'}), 404
 
-    # Return transaction in json format
+    # Convert transaction to dictionary
     transaction = build_transaction_response(result)
 
     # Return transaction
@@ -100,6 +104,11 @@ def get_transaction(id):
 def modify_transaction(id):
     # Get json
     data = request.json
+    
+    # Return error if no JSON data received
+    if data is None:
+        return jsonify({'error': 'No JSON data received'}), 400
+        
     to_update = {}
 
     try:
