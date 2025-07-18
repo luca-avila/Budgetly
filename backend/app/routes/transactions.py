@@ -125,13 +125,12 @@ def modify_transaction(id):
 
     # Check what fields should be updated and save in to_update
     if 'amount' in data:
-        to_update['amount'] = data['amount']
-    # Check if amount is a number
+        # Check if amount is a number
         try:
             r_amount = float(data['amount'])
         except (ValueError, TypeError):
             return jsonify({'error': 'Amount must be a number'}), 400
-    # Check if amount is negative
+        # Check if amount is negative
         if r_amount < 0:
             return jsonify({'error': 'Amount must be a positive number'}), 400
         to_update['amount'] = r_amount
