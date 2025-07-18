@@ -63,24 +63,24 @@ async function patchJson(url, id, data) {
     return handleJsonResponse(response);
 }
 
-async function getFromApi(url, id = undefined) {
+export async function getFromApi(url, id = undefined) {
     validateUrl(url);
     return await getJson(url, id);
 }
 
-async function postToApi(url, transaction) {
+export async function postToApi(url, transaction) {
     validateUrl(url);
     validateTransaction(transaction);
     return await postJson(url, transaction);
 }
 
-async function deleteFromApi(url, id) {
+export async function deleteFromApi(url, id) {
     validateUrl(url);
     validateId(id);
     return await deleteJson(url, id);
 }
 
-async function patchToApi(url, id, data) {
+export async function patchToApi(url, id, data) {
     validateUrl(url);
     validateId(id);
     validateTransaction(data);
