@@ -1,9 +1,11 @@
-export function displayTransactions(transactions, containerId, onClick) {
+export function showTransactions(transactions, containerId, onClick) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
     
     if (!transactions.length) {
-        container.innerHTML = 'No transactions found';
+        const noTransactionsMessage = document.createElement('p');
+        noTransactionsMessage.textContent = 'No transactions found';
+        container.appendChild(noTransactionsMessage);
         return;
     }
 
@@ -33,7 +35,7 @@ export function displayTransactions(transactions, containerId, onClick) {
     container.appendChild(list);
 }
 
-export function showAddForm(containerId, onSubmit) {
+export function showAddForm(containerId, onSubmit, onBack) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
 
@@ -85,6 +87,14 @@ export function showAddForm(containerId, onSubmit) {
     });
 
     container.appendChild(form);
+    
+    if (onBack) {
+        const backButton = document.createElement('button');
+        backButton.textContent = 'Back';
+        backButton.type = 'button';
+        backButton.addEventListener('click', onBack);
+        container.appendChild(backButton);
+    }
 }
 
 export function showTransactionDetails(transaction, containerId, onDelete, onEdit, onBack) {
@@ -92,13 +102,26 @@ export function showTransactionDetails(transaction, containerId, onDelete, onEdi
     container.innerHTML = '';
 
     const details = document.createElement('div');
-    details.innerHTML = `
-        <h3>${transaction.type}</h3>
-        <p>Amount: $${transaction.amount}</p>
-        <p>Category: ${transaction.category}</p>
-        <p>Description: ${transaction.description}</p>
-        <p>Date: ${transaction.date}</p>
-    `;
+    
+    const title = document.createElement('h3');
+    title.textContent = transaction.type;
+    details.appendChild(title);
+    
+    const amountPara = document.createElement('p');
+    amountPara.textContent = `Amount: $${transaction.amount}`;
+    details.appendChild(amountPara);
+    
+    const categoryPara = document.createElement('p');
+    categoryPara.textContent = `Category: ${transaction.category}`;
+    details.appendChild(categoryPara);
+    
+    const descriptionPara = document.createElement('p');
+    descriptionPara.textContent = `Description: ${transaction.description}`;
+    details.appendChild(descriptionPara);
+    
+    const datePara = document.createElement('p');
+    datePara.textContent = `Date: ${transaction.date}`;
+    details.appendChild(datePara);
 
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
@@ -160,13 +183,21 @@ export function showEditForm(transaction, containerId, onSubmit) {
             alert('Please enter a valid amount');
             return;
         }
+        
+        // Convert ID to string if it exists, otherwise show error
+        const transactionId = transaction.id;
+        if (!transactionId) {
+            alert('Error: Transaction ID not found. Cannot update transaction.');
+            return;
+        }
+        
         const updatedTransaction = {
             type: inputs.type.value,
             amount: amount,
             category: inputs.category.value,
             description: inputs.description.value
         };
-        onSubmit(transaction.id, updatedTransaction);
+        onSubmit(String(transactionId), updatedTransaction);
     });
 
     container.appendChild(form);
