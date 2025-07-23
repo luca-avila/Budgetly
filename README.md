@@ -4,7 +4,7 @@
 
 > ⚠️ This is a practice project built to sharpen my skills in full-stack development. It’s not a production app, but a clean showcase of functionality and structure.
 
-📽️ [Ver demo en YouTube](https://youtu.be/jbmCdf7egbI?si=mSjs2pYSpknHaMNh)
+📽️ [Watch demo on YouTube](https://youtu.be/jbmCdf7egbI?si=mSjs2pYSpknHaMNh)
 ---
 
 ## 🚀 Features
