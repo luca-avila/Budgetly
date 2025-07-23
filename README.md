@@ -1,6 +1,8 @@
 # 💸 Budgetly
 
-**Budgetly** is a minimal personal finance tracker that helps you log income and expenses, visualize spending categories, and stay focused on your financial goals.
+**Budgetly** is a minimal full-stack personal finance tracker with a web interface. It lets you log income and expenses, track spending visually, and view summaries — all from the browser.
+
+> ⚠️ This is a practice project built to sharpen my skills in full-stack development. It’s not a production app, but a clean showcase of functionality and structure.
 
 ---
 
@@ -10,9 +12,10 @@
 - Categorize each transaction
 - Automatic date tracking
 - View recent transactions
-- Simple dashboard with summaries
-- Visualize spending with charts
-- Light interactivity via JavaScript
+- Summary dashboard (totals, balance)
+- Spending visualization (basic charts)
+- Responsive UI with Bootstrap
+- Interactive behavior with vanilla JavaScript
 
 ---
 
@@ -41,8 +44,12 @@ budgetly/
 │   └── database.py
 │  
 ├── frontend/
-│   ├── static/
-│   │   └── script.js
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   ├── api.js
+│   │   ├── main.js
+│   │   └── ui.js
 │   └── index.html
 ├── run.py
 ├── README.md
@@ -57,8 +64,8 @@ budgetly/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/budgetly.git
-cd budgetly/backend
+git clone https://github.com/luca-avila/Budgetly.git
+cd Budgetly
 ```
 
 ### 2. (Optional) Create and activate a virtual environment
@@ -77,28 +84,16 @@ pip install -r requirements.txt
 ### 4. Run the app
 
 ```bash
-python app.py
+python run.py
+cd frontend
+python3 -m http.server 8000
 ```
 
 ### 5. Open your browser
 
 Go to:
 ```
-http://127.0.0.1:5000
-```
-
----
-
-## 📦 Dependencies
-
-Listed in `requirements.txt`. Core dependencies:
-
-- Flask
-- SQLAlchemy
-
-To generate/update the list:
-```bash
-pip freeze > requirements.txt
+http://127.0.0.1:8000
 ```
 
 ---

@@ -1,27 +1,85 @@
-/* Background & Base */
 body {
     background-color: #f9fafb;
     color: #111827;
   }
-  
-  /* Primary Button Color */
+
   .bg-primary-custom {
     background-color: #2563eb;
     color: white;
   }
-  
-  /* Income (Green) */
-  .color-income {
-    color: #22c55e;
-  }
-  
-  /* Expense (Red) */
-  .color-expense {
-    color: #ef4444;
-  }
-  
-  /* Muted Text (Gray) */
+
   .text-muted-custom {
     color: #6b7280;
   }
+
+  .transaction-list {
+    display: flex;
+    flex-direction: column;
+  }
   
+  .transaction-item {
+    padding: 15px;
+    margin: 5px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    border: none;
+    transition: transform 0.2s ease;
+  }
+
+  .transaction-item:hover {
+    transform: translateY(-2px);
+  }
+
+  .transaction-item.income-item {
+    background-color: #22c55e;
+    color: white;
+    box-shadow: 0 2px 4px rgba(34, 197, 94, 0.3);
+  }
+
+  .transaction-item.expense-item {
+    background-color: #ef4444;
+    color: white;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+  }
+
+  .transaction-item.buy-item {
+    background-color: #ef4444;
+    color: white;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+  }
+
+  .transaction-details {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: white;
+    margin-top: 20px;
+  }
+
+  h3.expense-transaction {
+    margin-bottom: 10px;
+    color: #ef4444;
+  }
+
+  h3.income-transaction {
+    margin-bottom: 10px;
+    color: #22c55e;
+  }
+
+  .transaction-details p {
+    margin-bottom: 5px;
+  }
+
+  .btn {
+    background-color: #2563eb;
+    color: white;
+  }
+
+  .btn:hover {
+    background-color: #1d4ed8;
+    color: white;
+  }

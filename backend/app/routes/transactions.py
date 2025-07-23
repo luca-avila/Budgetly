@@ -41,7 +41,7 @@ def add_transaction():
     if r_amount < 0:
         return jsonify({'error': 'Amount must be a positive number'}), 400
 
-    # Return error if wrong transaction type is sended
+    # Return error if wrong transaction type is sent
     if data['type'] not in ['Buy', 'Income']:
         return jsonify({'error': 'Transaction type should be Buy or Income'}), 400
 
@@ -64,7 +64,7 @@ def get_transactions():
     try:
         # Get all transactions
         with engine.begin() as conn:
-            stmt = transactions.select().order_by(desc(transactions.c.date))  # ordena por fecha descendente
+            stmt = transactions.select().order_by(desc(transactions.c.date), desc(transactions.c.id))
             result = conn.execute(stmt).fetchall()
     except Exception as e:
         return jsonify({'error': str(e)}), 500

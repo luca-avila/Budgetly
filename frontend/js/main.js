@@ -71,8 +71,6 @@ async function loadAddForm(){
     loadBackButton();
 }
 
-// TRANSACTION DETAILS HANDLERS
-
 async function handleTransactionClick(transaction) {
     try {
         await displayTransactionDetails(transaction);
@@ -81,8 +79,6 @@ async function handleTransactionClick(transaction) {
         showError('Failed to load transaction details.');
     }
 }
-
-// TRANSACTION DETAILS HANDLERS
 
 async function displayTransactionDetails(transaction) {
     appContainer.innerHTML = '';
@@ -115,7 +111,7 @@ async function displayTransactionDetails(transaction) {
             await deleteFromApi(TRANSACTIONS_ENDPOINT, String(transactionToDelete.id));
             await initApp();
         } catch (error) {
-            console.log('Error deleting transaction:', error);
+            console.error('Error deleting transaction:', error);
             showError('Failed to delete transaction. Please try again.');
         }
     }
