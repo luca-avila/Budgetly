@@ -1,11 +1,9 @@
-import { showTransactions, showAddForm, showTransactionDetails, showEditForm } from './ui.js';
+import { getTransactions, getAddForm, getTransactionDetails, getEditForm } from './ui.js';
 import { getFromApi, postToApi, deleteFromApi, patchToApi } from './api.js';
 
 // CONFIGURATION VARIABLES
 const API_BASE_URL = 'http://localhost:5000';
 const TRANSACTIONS_ENDPOINT = `${API_BASE_URL}/transactions`;
-const APP_CONTAINER_ID = 'app';
-
 const appContainer = document.querySelector('#app');
 
 // UTILITY FUNCTIONS
@@ -41,12 +39,13 @@ function loadBackButton(){
 
 async function loadTransactions() {
     try {
+        appContainer.innerHTML = '';
         const transactions = await getFromApi(TRANSACTIONS_ENDPOINT);
-        showTransactions(
+        const transactionsList = getTransactions(
             transactions, 
-            APP_CONTAINER_ID, 
             handleTransactionClick
         );
+        appContainer.appendChild(transactionsList);
     } catch (error) {
         console.error('Error loading transactions:', error);
         showError('Failed to load transactions. Please try again.');
@@ -56,8 +55,9 @@ async function loadTransactions() {
 // FORM HANDLERS
 
 async function loadAddForm(){
-    showAddForm(APP_CONTAINER_ID, onSubmitClick, initApp);
-    async function onSubmitClick(newTransaction) {
+    appContainer.innerHTML = '';
+    
+    const addForm = getAddForm(async function onSubmitClick(newTransaction) {
         try {
             await postToApi(TRANSACTIONS_ENDPOINT, newTransaction);
             await initApp();
@@ -65,7 +65,10 @@ async function loadAddForm(){
             console.error('Error adding transaction:', error);
             showError('Failed to add transaction. Please try again.');
         }
-    }
+    });
+    
+    appContainer.appendChild(addForm);
+    loadBackButton();
 }
 
 // TRANSACTION DETAILS HANDLERS
@@ -82,9 +85,12 @@ async function handleTransactionClick(transaction) {
 // TRANSACTION DETAILS HANDLERS
 
 async function displayTransactionDetails(transaction) {
+    appContainer.innerHTML = '';
 
     function onEditClick(transactionToEdit) {
-        showEditForm(transactionToEdit, APP_CONTAINER_ID, onSubmitClick);
+        appContainer.innerHTML = '';
+        const editForm = getEditForm(transactionToEdit, onSubmitClick);
+        appContainer.appendChild(editForm);
         loadBackButton();
     }
     
@@ -114,13 +120,13 @@ async function displayTransactionDetails(transaction) {
         }
     }
 
-    showTransactionDetails(
+    const transactionDetails = getTransactionDetails(
         transaction, 
-        APP_CONTAINER_ID, 
         onDeleteClick,
         onEditClick,
         onBackClick
     );
+    appContainer.appendChild(transactionDetails);
 }
 
 // APP INITIALIZATION

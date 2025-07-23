@@ -1,12 +1,8 @@
-export function showTransactions(transactions, containerId, onClick) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    
+export function getTransactions(transactions,onClick) {
     if (!transactions.length) {
         const noTransactionsMessage = document.createElement('p');
         noTransactionsMessage.textContent = 'No transactions found';
-        container.appendChild(noTransactionsMessage);
-        return;
+        return noTransactionsMessage;
     }
 
     const list = document.createElement('div');
@@ -32,13 +28,10 @@ export function showTransactions(transactions, containerId, onClick) {
         list.appendChild(item);
     });
     
-    container.appendChild(list);
+    return list;
 }
 
-export function showAddForm(containerId, onSubmit, onBack) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-
+export function getAddForm(onSubmitClick) {
     const form = document.createElement('form');
 
     const fields = [
@@ -79,28 +72,16 @@ export function showAddForm(containerId, onSubmit, onBack) {
             description: inputs.description.value
         };
         try {
-            onSubmit(transaction);
+            onSubmitClick(transaction);
             form.reset();
         } catch (error) {
             console.error('Error adding transaction:', error);
         }
     });
-
-    container.appendChild(form);
-    
-    if (onBack) {
-        const backButton = document.createElement('button');
-        backButton.textContent = 'Back';
-        backButton.type = 'button';
-        backButton.addEventListener('click', onBack);
-        container.appendChild(backButton);
-    }
+    return form;
 }
 
-export function showTransactionDetails(transaction, containerId, onDelete, onEdit, onBack) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-
+export function getTransactionDetails(transaction, onDelete, onEdit, onBack) {
     const details = document.createElement('div');
     
     const title = document.createElement('h3');
@@ -139,16 +120,14 @@ export function showTransactionDetails(transaction, containerId, onDelete, onEdi
     backButton.textContent = 'Back';
     backButton.addEventListener('click', onBack);
 
-    container.appendChild(details);
-    container.appendChild(deleteButton);
-    container.appendChild(editButton);
-    container.appendChild(backButton);
+    details.appendChild(deleteButton);
+    details.appendChild(editButton);
+    details.appendChild(backButton);
+
+    return details;
 }
 
-export function showEditForm(transaction, containerId, onSubmit) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-
+export function getEditForm(transaction, onSubmit) {
     const form = document.createElement('form');
 
     const fields = [
@@ -200,5 +179,5 @@ export function showEditForm(transaction, containerId, onSubmit) {
         onSubmit(String(transactionId), updatedTransaction);
     });
 
-    container.appendChild(form);
+    return form;
 }
