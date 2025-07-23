@@ -1,0 +1,27 @@
+/* Background & Base */
+body {
+    background-color: #f9fafb;
+    color: #111827;
+  }
+  
+  /* Primary Button Color */
+  .bg-primary-custom {
+    background-color: #2563eb;
+    color: white;
+  }
+  
+  /* Income (Green) */
+  .color-income {
+    color: #22c55e;
+  }
+  
+  /* Expense (Red) */
+  .color-expense {
+    color: #ef4444;
+  }
+  
+  /* Muted Text (Gray) */
+  .text-muted-custom {
+    color: #6b7280;
+  }
+  
