@@ -23,6 +23,7 @@ function showError(message) {
 function loadAddButton(){
     const addButton = document.createElement('button');
     addButton.textContent = 'Add Transaction';
+    addButton.classList.add('btn', 'mt-3');
     addButton.addEventListener('click', loadAddForm);
     appContainer.appendChild(addButton);
 }
@@ -30,6 +31,7 @@ function loadAddButton(){
 function loadBackButton(){
     const backButton = document.createElement('button');
     backButton.textContent = 'Back';
+    backButton.classList.add('btn', 'mt-3');
     backButton.addEventListener('click', initApp);
     appContainer.appendChild(backButton);
 }
